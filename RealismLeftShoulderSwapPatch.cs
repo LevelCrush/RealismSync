@@ -14,23 +14,40 @@ namespace StanceReplication
 {
     public class RealismLeftShoulderSwapPatch : ModulePatch
     {
-        public static NetDataWriter writer;
         protected override MethodBase GetTargetMethod()
         {
+            
+            Plugin.EnableShoulderSwap.SettingChanged += (sender, args) =>
+            {
+                if (Plugin.EnableShoulderSwap.Value == false)
+                {
+                    // disabled. Let's send a packet out to reset this person back to right hand
+                    TransitionShoulder(false);
+                }
+            };
+            
             return typeof(StanceController).GetMethod(nameof(StanceController.ToggleLeftShoulder));
         }
 
-        [PatchPostfix]
-        public static void Postfix()
+        private static void TransitionShoulder(bool leftShoulder)
         {
             CoopHandler fikaCoopHandler;
             if (CoopHandler.TryGetCoopHandler(out fikaCoopHandler))
             {
                 fikaCoopHandler.MyPlayer.PacketSender.FirearmPackets.Enqueue(new WeaponPacket()
                 {
-                    HasStanceChange = true,  
-                    LeftStanceState = StanceController.IsLeftShoulder
+                    HasStanceChange = true,
+                    LeftStanceState = leftShoulder
                 });
+            }
+        }
+
+        [PatchPostfix]
+        public static void Postfix()
+        {
+            if (Plugin.EnableShoulderSwap.Value)
+            {
+                TransitionShoulder(StanceController.IsLeftShoulder);
             }
         }
     }
