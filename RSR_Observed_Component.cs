@@ -44,7 +44,7 @@ namespace StanceReplication
 
         private void Update()
         {
-                
+
             /* 
              
              Issue Raised by Traveller
@@ -60,7 +60,7 @@ namespace StanceReplication
             Class362:UnityEngine.ILogHandler.LogException(Exception, Object)
             UnityEngine.Debug:CallOverridenDebugHandler(Exception, Object)
             */
-            
+
             /*
              * Notes:
              * From Fontaine on Fika Discord
@@ -74,15 +74,20 @@ namespace StanceReplication
              * This stack trace provided by Traveler did occur in Primal-13's playgroup as well
              * But only when the match was loading. Errors did stop eventually and it was noted that the individual was experiencing alot of packet loss
              */
-            
-            
+
+
+            if (_observedCoopPlayer == null)
+            {
+                return;
+            }
+
             ProceduralWeaponAnimation pwa = _observedCoopPlayer.ProceduralWeaponAnimation;
-            
-            
+
+
             if (_observedCoopPlayer.IsSprintEnabled || !_observedCoopPlayer.ProceduralWeaponAnimation.OverlappingAllowsBlindfire)
             {
                 _cancelStanceTimer += Time.deltaTime;
-                if(_cancelStanceTimer >= Plugin.CancelTimer.Value)
+                if (_cancelStanceTimer >= Plugin.CancelTimer.Value)
                 {
                     _allowStanceTimer = 0f;
                     _canUpdateStance = false;
@@ -114,7 +119,7 @@ namespace StanceReplication
                 pwa.HandsContainer.HandsPosition.Zero = pwa.PositionZeroSum + _targetPosition * pwa.Single_3 * 1.5f;
                 pwa.HandsContainer.WeaponRootAnim.rotation = Quaternion.Slerp(pwa.HandsContainer.WeaponRootAnim.rotation, _targetRotation, 1f);
             }
-            else 
+            else
             {
                 doPatrol = false;
                 _targetPosition = Vector3.Lerp(_targetPosition, Vector3.zero, 0.5f);
@@ -129,8 +134,8 @@ namespace StanceReplication
         {
             _packetPosition = weapPos;
             _packetRotation = rot;
-            _isPatrol  = patrol;
-            sprintAnim = anim;  
+            _isPatrol = patrol;
+            sprintAnim = anim;
 
         }
     }
