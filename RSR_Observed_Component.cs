@@ -44,40 +44,10 @@ namespace StanceReplication
 
         private void Update()
         {
-
-            /* 
-             
-             Issue Raised by Traveller
             
-             [Exception] : NullReferenceException
-            UnityEngine.Animator.SetBool (System.Int32 id, System.Boolean value) (at <8200f53961d4421c8c1d6290273b47b5>:0)
-            GClass1247.SetBool (System.Int32 valueNameHash, System.Boolean value) (at <a5b6eaefee6842aba73e4a77ea14a564>:0)
-            WeaponAnimationSpeedControllerClass.SetPatrol (IAnimator animator, System.Boolean patrol) (at <a5b6eaefee6842aba73e4a77ea14a564>:0)
-            ObjectInHandsAnimator.SetPatrol (System.Boolean b) (at <a5b6eaefee6842aba73e4a77ea14a564>:0)
-            EFT.MovementContext.SetPatrol (System.Boolean b) (at <a5b6eaefee6842aba73e4a77ea14a564>:0)
-            StanceReplication.RSR_Observed_Component.Update () (at <170bb6ad5e534f6fafc4204d765c681a>:0)
-            UnityEngine.DebugLogHandler:LogException(Exception, Object)
-            Class362:UnityEngine.ILogHandler.LogException(Exception, Object)
-            UnityEngine.Debug:CallOverridenDebugHandler(Exception, Object)
-            */
-
-            /*
-             * Notes:
-             * From Fontaine on Fika Discord
-                if it's not being done already, check to make sure Player.FirearmController is not null before setting patrol stance
-            
-            
-             * Fontaine: OP
-                 — Today at 5:18 AM
-                Solarint told me he had this sort of error reported before since he added the bot patrol stance feature to SAIN. I've never seen it with Realism though.
-             
-             * This stack trace provided by Traveler did occur in Primal-13's playgroup as well
-             * But only when the match was loading. Errors did stop eventually and it was noted that the individual was experiencing alot of packet loss
-             */
-
-
             if (_observedCoopPlayer == null)
             {
+                Plugin.REAL_Logger.LogInfo("No observed coop player inside RSR Oberved Component. ");
                 return;
             }
 

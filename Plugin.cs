@@ -8,10 +8,11 @@ using Fika.Core.Networking;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System.Collections.Generic;
+using ChartAndGraph;
 
 namespace StanceReplication
 {
-    [BepInPlugin("com.lacyway.rsr", "RealismStanceReplication", "1.1.1")]
+    [BepInPlugin("com.lacyway.rsr", "RealismStanceReplication", "1.2.0")]
     [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("RealismMod", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BaseUnityPlugin
@@ -63,7 +64,15 @@ namespace StanceReplication
 
         private void NetworkManagerCreated(FikaNetworkManagerCreatedEvent @event)
         {
-            @event.Manager.RegisterPacket<RealismPacket>(HandleRealismPacket);
+            switch (@event.Manager)
+            {
+                case FikaServer server:
+                    server.RegisterPacket<RealismPacket, NetPeer>(HandleRealismPacketServer);
+                    break;
+                case FikaClient client:
+                    client.RegisterPacket<RealismPacket>(HandleRealismPacketClient);
+                    break;
+            }
         }
         
 
@@ -77,11 +86,6 @@ namespace StanceReplication
             {
                 ObservedComponents = new Dictionary<int, RSR_Observed_Component>();
             }
-        }
-
-        private void HandleRealismPacket(RealismPacket packet)
-        {
-            
         }
         
         private void HandleRealismPacketClient(RealismPacket packet)

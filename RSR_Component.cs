@@ -23,8 +23,7 @@ namespace StanceReplication
         FikaServer server;
         FikaClient client;
         bool isServer = false;
-        NetDataWriter writer = new NetDataWriter();
-
+ 
         private void Start()
         {
             player = GetComponent<CoopPlayer>();
@@ -75,7 +74,7 @@ namespace StanceReplication
                 SprintAnimationVarient = player.BodyAnimatorCommon.GetFloat(PlayerAnimator.WEAPON_SIZE_MODIFIER_PARAM_HASH)
             };
 
-            writer.Reset();
+           
             if (isServer)
             {
                 server.SendDataToAll(ref packet, LiteNetLib.DeliveryMethod.Unreliable);
