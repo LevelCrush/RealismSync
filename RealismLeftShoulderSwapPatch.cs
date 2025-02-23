@@ -31,6 +31,7 @@ namespace StanceReplication
 
         private static void TransitionShoulder(bool leftShoulder)
         {
+            /*
             CoopHandler fikaCoopHandler;
             if (CoopHandler.TryGetCoopHandler(out fikaCoopHandler))
             {
@@ -39,7 +40,7 @@ namespace StanceReplication
                     HasStanceChange = true,
                     LeftStanceState = leftShoulder
                 });
-            }
+            } */
         }
 
         [PatchPostfix]

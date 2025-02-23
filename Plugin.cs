@@ -50,8 +50,8 @@ namespace StanceReplication
                 new CoopBot_Create_Patch().Enable();
             }
             
-            FikaEventDispatcher.SubscribeEvent<FikaClientCreatedEvent>(ClientCreated);
-            FikaEventDispatcher.SubscribeEvent<FikaServerCreatedEvent>(ServerCreated);
+          
+            FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerCreatedEvent>(NetworkManagerCreated);
             FikaEventDispatcher.SubscribeEvent<FikaGameCreatedEvent>(GameWorldStarted);
             
             ObservedComponents = new Dictionary<int, RSR_Observed_Component>();
@@ -60,6 +60,12 @@ namespace StanceReplication
             REAL_Logger.LogInfo($"{nameof(Plugin)} has been loaded.");
 
         }
+
+        private void NetworkManagerCreated(FikaNetworkManagerCreatedEvent @event)
+        {
+            @event.Manager.RegisterPacket<RealismPacket>(HandleRealismPacket);
+        }
+        
 
         private void GameWorldStarted(FikaGameCreatedEvent @event)
         {
@@ -73,16 +79,11 @@ namespace StanceReplication
             }
         }
 
-        private void ServerCreated(FikaServerCreatedEvent @event)
+        private void HandleRealismPacket(RealismPacket packet)
         {
-            @event.Server.packetProcessor.SubscribeNetSerializable<RealismPacket, NetPeer>(HandleRealismPacketServer);
+            
         }
-
-        private void ClientCreated(FikaClientCreatedEvent @event)
-        {
-            @event.Client.packetProcessor.SubscribeNetSerializable<RealismPacket>(HandleRealismPacketClient);
-        }
-
+        
         private void HandleRealismPacketClient(RealismPacket packet)
         {
             if (ObservedComponents.TryGetValue(packet.NetID, out var player))
@@ -97,7 +98,7 @@ namespace StanceReplication
             {
                 player.SetAnimValues(packet.WeapPosition, packet.Rotation, packet.IsPatrol, packet.SprintAnimationVarient);
             }
-            Singleton<FikaServer>.Instance.SendDataToAll(new NetDataWriter(), ref packet, DeliveryMethod.Unreliable, peer);
+           // Singleton<FikaServer>.Instance.SendDataToAll(new NetDataWriter(), ref packet, DeliveryMethod.Unreliable, peer);
         }
     }
 }

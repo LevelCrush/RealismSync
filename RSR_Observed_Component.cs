@@ -29,7 +29,7 @@ namespace StanceReplication
             Plugin.ObservedComponents.Add(_observedCoopPlayer.NetId, this);
         }
 
-        private void DeleteThis(EFT.Player player, EFT.IPlayer lastAggressor, DamageInfo damageInfo, EBodyPart part)
+        private void DeleteThis(EFT.Player player, EFT.IPlayer lastAggressor, DamageInfoStruct damageInfo, EBodyPart part)
         {
             _observedCoopPlayer.OnPlayerDead -= DeleteThis;
             Destroy(this);

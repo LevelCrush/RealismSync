@@ -47,7 +47,7 @@ namespace StanceReplication
             player.OnPlayerDead += DeleteThis;
         }
 
-        private void DeleteThis(EFT.Player player, EFT.IPlayer lastAggressor, DamageInfo damageInfo, EBodyPart part)
+        private void DeleteThis(EFT.Player player, EFT.IPlayer lastAggressor, DamageInfoStruct damageInfo, EBodyPart part)
         {
             player.OnPlayerDead -= DeleteThis;
             Destroy(this);
@@ -78,11 +78,11 @@ namespace StanceReplication
             writer.Reset();
             if (isServer)
             {
-                server.SendDataToAll(writer, ref packet, LiteNetLib.DeliveryMethod.Unreliable);
+                server.SendDataToAll(ref packet, LiteNetLib.DeliveryMethod.Unreliable);
             }
             else
             {
-                client.SendData(writer, ref packet, LiteNetLib.DeliveryMethod.Unreliable);
+                client.SendData(ref packet, LiteNetLib.DeliveryMethod.Unreliable);
             }
         }
     }
