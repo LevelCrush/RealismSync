@@ -47,7 +47,7 @@ namespace StanceReplication
             
             if (_observedCoopPlayer == null)
             {
-                Plugin.REAL_Logger.LogInfo("No observed coop player inside RSR Oberved Component. ");
+                Plugin.REAL_Logger.LogInfo($"No observed coop player inside RSR Oberved Component.");
                 return;
             }
 

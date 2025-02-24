@@ -12,7 +12,7 @@ using ChartAndGraph;
 
 namespace StanceReplication
 {
-    [BepInPlugin("com.lacyway.rsr", "RealismStanceReplication", "1.2.0")]
+    [BepInPlugin("com.lacyway.rsr", "RealismStanceReplication", "1.2.1")]
     [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("RealismMod", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BaseUnityPlugin
@@ -74,6 +74,15 @@ namespace StanceReplication
                     break;
             }
         }
+
+        private void HandleRealismPacket(RealismPacket packet)
+        {
+            if (ObservedComponents.TryGetValue(packet.NetID, out var player))
+            {
+                player.SetAnimValues(packet.WeapPosition, packet.Rotation, packet.IsPatrol, packet.SprintAnimationVarient);
+            }
+        }
+        
         
 
         private void GameWorldStarted(FikaGameCreatedEvent @event)
@@ -102,7 +111,7 @@ namespace StanceReplication
             {
                 player.SetAnimValues(packet.WeapPosition, packet.Rotation, packet.IsPatrol, packet.SprintAnimationVarient);
             }
-           // Singleton<FikaServer>.Instance.SendDataToAll(new NetDataWriter(), ref packet, DeliveryMethod.Unreliable, peer);
+            Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.Unreliable, peer);
         }
     }
 }
