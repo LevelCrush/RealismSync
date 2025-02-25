@@ -6,8 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using RealismModSync.StanceReplication.Components;
 
-namespace StanceReplication
+namespace RealismModSync.StanceReplication.Patches
 {
     public class CoopPlayer_Create_Patch : ModulePatch
     {

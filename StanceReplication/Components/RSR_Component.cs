@@ -14,8 +14,9 @@ using Fika.Core.Coop.Utils;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using Fika.Core.Coop.Utils;
+using RealismModSync.StanceReplication.Packets;
 
-namespace StanceReplication
+namespace RealismModSync.StanceReplication.Components
 {
     public class RSR_Component : MonoBehaviour
     {
@@ -65,7 +66,7 @@ namespace StanceReplication
                 frameCounter++;
             }*/
 
-            RealismPacket packet = new RealismPacket()
+            RealismStanceReplicationPacket packet = new RealismStanceReplicationPacket()
             {
                 NetID = player.NetId,
                 WeapPosition = player.ProceduralWeaponAnimation.HandsContainer.HandsPosition.Zero,

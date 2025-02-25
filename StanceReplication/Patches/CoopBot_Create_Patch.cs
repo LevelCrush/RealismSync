@@ -4,8 +4,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using EFT;
 using Fika.Core.Coop.GameMode;
+using RealismModSync.StanceReplication.Components;
 
-namespace StanceReplication
+namespace RealismModSync.StanceReplication.Patches
 {
     public class CoopBot_Create_Patch : ModulePatch
     {
@@ -17,7 +18,7 @@ namespace StanceReplication
         [PatchPostfix]
         public static async void Postfix(Task<LocalPlayer>__result)
         {
-            if (Plugin.EnableForBots.Value) 
+            if (Config.EnableForBots.Value) 
             {
                 var res = await __result;
                 ((CoopBot)res).gameObject.AddComponent<RSR_Component>();

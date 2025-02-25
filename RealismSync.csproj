@@ -6,14 +6,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1AA325D3-9FEC-4DFD-B65C-A8054365E44A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>RealismStanceReplication</RootNamespace>
-    <AssemblyName>RealismStanceReplication</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <RootNamespace>RealismModSync</RootNamespace>
+    <AssemblyName>RealismModSync</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />    
-    <LangVersion>8</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -82,18 +82,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationManagerAttributes.cs" />
-    <Compile Include="CoopBot_Create_Patch.cs" />
-    <Compile Include="ObservedCoopPlayer_Create_Patch.cs" />
-    <Compile Include="CoopPlayer_Create_Patch.cs" />
-    <Compile Include="RealismLeftShoulderSwapPatch.cs" />
-    <Compile Include="RealismPacket.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RSR_Observed_Component.cs" />
-    <Compile Include="RSR_Component.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="StanceReplication\Components\RSR_Component.cs" />
+    <Compile Include="StanceReplication\Components\RSR_Observed_Component.cs" />
+    <Compile Include="StanceReplication\Config.cs" />
+    <Compile Include="StanceReplication\Core.cs" />
+    <Compile Include="StanceReplication\Fika.cs" />
+    <Compile Include="StanceReplication\Packets\RealismStanceReplicationPacket.cs" />
+    <Compile Include="StanceReplication\Patch.cs" />
+    <Compile Include="StanceReplication\Patches\CoopBot_Create_Patch.cs" />
+    <Compile Include="StanceReplication\Patches\CoopPlayer_Create_Patch.cs" />
+    <Compile Include="StanceReplication\Patches\ObservedCoopPlayer_Create_Patch.cs" />
+    <Compile Include="StanceReplication\Patches\RealismLeftShoulderSwapPatch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

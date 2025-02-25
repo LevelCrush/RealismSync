@@ -4,7 +4,7 @@ using EFT.UI;
 using Fika.Core.Coop.Players;
 using UnityEngine;
 
-namespace StanceReplication
+namespace RealismModSync.StanceReplication.Components
 {
     public class RSR_Observed_Component : MonoBehaviour
     {
@@ -26,7 +26,7 @@ namespace StanceReplication
         {
             _observedCoopPlayer = GetComponent<ObservedCoopPlayer>();
             _observedCoopPlayer.OnPlayerDead += DeleteThis;
-            Plugin.ObservedComponents.Add(_observedCoopPlayer.NetId, this);
+            Core.ObservedComponents.AddOrUpdate(_observedCoopPlayer.NetId, this, ((netID, component) => this));
         }
 
         private void DeleteThis(EFT.Player player, EFT.IPlayer lastAggressor, DamageInfoStruct damageInfo, EBodyPart part)
@@ -47,7 +47,7 @@ namespace StanceReplication
             
             if (_observedCoopPlayer == null)
             {
-                Plugin.REAL_Logger.LogInfo($"No observed coop player inside RSR Oberved Component.");
+                Plugin.REAL_Logger.LogInfo($"No observed coop player inside RSR Observed Component.");
                 return;
             }
 
@@ -57,7 +57,7 @@ namespace StanceReplication
             if (_observedCoopPlayer.IsSprintEnabled || !_observedCoopPlayer.ProceduralWeaponAnimation.OverlappingAllowsBlindfire)
             {
                 _cancelStanceTimer += Time.deltaTime;
-                if (_cancelStanceTimer >= Plugin.CancelTimer.Value)
+                if (_cancelStanceTimer >= Config.CancelTimer.Value)
                 {
                     _allowStanceTimer = 0f;
                     _canUpdateStance = false;
@@ -67,7 +67,7 @@ namespace StanceReplication
             {
                 _cancelStanceTimer = 0f;
                 _allowStanceTimer += Time.deltaTime;
-                if (_allowStanceTimer >= Plugin.ResetTimer.Value)
+                if (_allowStanceTimer >= Config.ResetTimer.Value)
                 {
                     _canUpdateStance = true;
                 }

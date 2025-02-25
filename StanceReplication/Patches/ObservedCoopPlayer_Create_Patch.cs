@@ -7,8 +7,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Fika.Core.Coop.Components;
+using RealismModSync.StanceReplication.Components;
 
-namespace StanceReplication
+namespace RealismModSync.StanceReplication.Patches
 {
     public class ObservedCoopPlayer_Create_Patch : ModulePatch
     {
@@ -20,7 +21,7 @@ namespace StanceReplication
         [PatchPostfix]
         public static void Postfix(ObservedCoopPlayer __result)
         {
-            if (__result.IsObservedAI && !Plugin.EnableForBots.Value) return;
+            if (__result.IsObservedAI && !Config.EnableForBots.Value) return;
             __result.gameObject.AddComponent<RSR_Observed_Component>();
         }
     }

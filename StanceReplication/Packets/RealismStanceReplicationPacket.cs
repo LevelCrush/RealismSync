@@ -2,9 +2,9 @@
 using LiteNetLib.Utils;
 using UnityEngine;
 
-namespace StanceReplication
+namespace RealismModSync.StanceReplication.Packets
 {
-    public struct RealismPacket : INetSerializable
+    public struct RealismStanceReplicationPacket : INetSerializable
     {
         public float SprintAnimationVarient;
         public int NetID;

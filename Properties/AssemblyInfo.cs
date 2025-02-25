@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HandsAreNotBusy")]
+[assembly: AssemblyTitle("RealismModSync")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Lacyway")]
-[assembly: AssemblyProduct("HandsAreNotBusy")]
-[assembly: AssemblyCopyright("Copyright © Lacyway 2024")]
+[assembly: AssemblyCompany("RealismModSync")]
+[assembly: AssemblyProduct("RealismModSync")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
