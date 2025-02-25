@@ -82,6 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationManagerAttributes.cs" />
+    <Compile Include="HazardZones\Config.cs" />
+    <Compile Include="HazardZones\Core.cs" />
+    <Compile Include="HazardZones\Fika.cs" />
+    <Compile Include="HazardZones\Packets\RealismHazardPacket.cs" />
+    <Compile Include="HazardZones\Patch.cs" />
+    <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />
+    <Compile Include="HazardZones\Patches\ZonedDataGetZonesPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StanceReplication\Components\RSR_Component.cs" />
