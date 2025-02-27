@@ -8,6 +8,5 @@ public static class Patch
     public static void Awake()
     {
         new ShouldSpawnZonePatch().Enable();
-       // new ZonedDataGetZonesPatch().Enable();
     }
 }
