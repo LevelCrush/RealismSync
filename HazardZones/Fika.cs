@@ -1,5 +1,8 @@
 ﻿using System.Collections.Concurrent;
+using ChartAndGraph;
 using Comfort.Common;
+using EFT;
+using Fika.Core.Coop.GameMode;
 using Fika.Core.Modding;
 using Fika.Core.Modding.Events;
 using Fika.Core.Networking;
@@ -69,9 +72,22 @@ public static class Fika
             
         }
     }
+
+    private static void LoadZones(EZoneType zoneType, string map)
+    {
+        Plugin.REAL_Logger.LogInfo($"Loading Realism zones for {map} and type {(int)zoneType}");
+        var zones = ZoneData.GetZones(zoneType, map);
+        foreach (var zone in zones)
+        {
+            var zoneKey = Core.GenerateZoneKey(zone, zoneType);
+            Plugin.REAL_Logger.LogInfo($"Zone: {zoneKey} is cached");
+            Core.HazardGroups.AddOrUpdate(zoneKey, zone, (s, group) => zone);
+        }
+    }
     
     private static void GameWorldStarted(FikaGameCreatedEvent @event)
     {
+        Plugin.REAL_Logger.LogInfo("Initializing Zone Results and loading Zone data");
         // handle any initiation when the game world starts here
         if (Core.ZoneResults == null)
         {
@@ -79,7 +95,24 @@ public static class Fika
         }
         
         Core.ZoneResults.Clear();
+
+        if (Core.HazardGroups == null)
+        {
+            Core.HazardGroups = new ConcurrentDictionary<string, HazardGroup>();
+        }
         
+        Core.HazardGroups.Clear();
+
+        var map = ((CoopGame)@event.Game).Location_0.Id.ToLower();
+        
+        LoadZones(EZoneType.Gas, map);
+        LoadZones(EZoneType.GasAssets, map);
+        LoadZones(EZoneType.Radiation, map);
+        LoadZones(EZoneType.RadAssets, map);
+        LoadZones(EZoneType.Interactable, map);
+        LoadZones(EZoneType.SafeZone, map);
+        LoadZones(EZoneType.Quest, map);
+
     }
 
     

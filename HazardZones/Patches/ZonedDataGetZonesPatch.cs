@@ -20,6 +20,7 @@ public class ZonedDataGetZonesPatch : ModulePatch
             foreach (var zone in __result)
             {
                 var zoneKey = Core.GenerateZoneKey(zone, zoneType);
+                Plugin.REAL_Logger.LogInfo($"Zone: {zoneKey} is cached");
                 Core.HazardGroups.AddOrUpdate(zoneKey, zone, (s, group) => zone);
             }
         }

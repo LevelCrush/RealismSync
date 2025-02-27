@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using RealismMod;
 
 
 namespace RealismModSync.HazardZones;
@@ -11,7 +12,6 @@ public static class Config
 
     public static void Bind(ConfigFile config)
     {
-       
     }
     
 }

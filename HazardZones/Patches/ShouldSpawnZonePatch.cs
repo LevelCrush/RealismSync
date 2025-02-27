@@ -18,12 +18,9 @@ public class ShouldSpawnZonePatch : ModulePatch
     {
         return typeof(ZoneSpawner).GetMethod("ShouldSpawnZone", BindingFlags.Static | BindingFlags.NonPublic);
     }
-
-
-   
     
     [PatchPrefix]
-    public static bool Prefix(ref bool __runOriginal, HazardGroup hazardLocation, EZoneType zoneType)
+    public static bool Prefix(ref bool __runOriginal, HazardGroup hazardLocation, EZoneType zoneType, ref bool __result)
     {
         
         
@@ -31,7 +28,7 @@ public class ShouldSpawnZonePatch : ModulePatch
         // respect it and cancel out
         if (!__runOriginal)
         {
-            Plugin.REAL_Logger.LogWarning($"{nameof(Plugin)} is honoring the previous prefix original method skip. No modification will take place");
+            Plugin.REAL_Logger.LogWarning($"Honoring the previous prefix original method skip. No modification will take place");
             return false;
         }
     
@@ -41,15 +38,18 @@ public class ShouldSpawnZonePatch : ModulePatch
         if (FikaBackendUtils.IsServer)
         {
             // always run original method if server
-            Plugin.REAL_Logger.LogInfo($"{nameof(Plugin)} is running zone checks for {zoneKey}");
+            Plugin.REAL_Logger.LogInfo($"Running zone checks for {zoneKey}");
             return true;
         }
-       
-      
         
         // only let original method run **if we have a result already stored and the result stored is true**
         Core.ZoneResults.TryGetValue(zoneKey, out var result);
-        Plugin.REAL_Logger.LogInfo($"{nameof(Plugin)} is {result} for {zoneKey}");
+        Plugin.REAL_Logger.LogInfo($"{result} for {zoneKey}");
+
+        // short circuit and force this result
+        __result = result;
+    
+        // if we had a cache result, run the original method. overwriting what we put into __result. Otherwise skip and return what we put into __result
         return result;
     }
 
@@ -65,10 +65,8 @@ public class ShouldSpawnZonePatch : ModulePatch
             // force a false on our result preventing the hazard zone from spawning
             // when the spawn packet comes in, this method will run again and hopefully
             // with the right data populated will run 
-            Plugin.REAL_Logger.LogInfo($"{nameof(Plugin)} is forcing no spawn for  {zoneKey} as there is no result cached");
+            Plugin.REAL_Logger.LogInfo($"Forcing no spawn for  {zoneKey} as there is no result cached");
             __result = false;
-            
-
         }
         
         // if we are the host, we are going to store this result and send it out via a packet to all connected clients
@@ -79,7 +77,7 @@ public class ShouldSpawnZonePatch : ModulePatch
             {
                 // send packet with zone key
                 // we only send packets when we **should** spawn a zone
-                Plugin.REAL_Logger.LogInfo($"{nameof(Plugin)} is sending {zoneKey} to other players to spawn");
+                Plugin.REAL_Logger.LogInfo($"Sending {zoneKey} to other players to spawn");
                 var packet = new RealismHazardPacket()
                 {
                     ZoneKey = zoneKey,
