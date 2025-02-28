@@ -52,6 +52,7 @@ public static class Fika
         switch (packet.ZoneType)
         {
             case EZoneType.Gas:
+            case EZoneType.GasAssets:
                 ZoneSpawner.CreateZone<GasZone>(hazardGroup, EZoneType.Gas);
                 break;
             case EZoneType.Radiation:
