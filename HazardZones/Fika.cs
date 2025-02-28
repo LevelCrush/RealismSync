@@ -48,6 +48,7 @@ public static class Fika
         Plugin.REAL_Logger.LogInfo($"Updating cache zone results for: {packet.ZoneKey}");
         Core.ZoneResults.AddOrUpdate(packet.ZoneKey, true, (key, oldValue) => true);
         
+        // immediately spawn in the zones when the packet is received
         switch (packet.ZoneType)
         {
             case EZoneType.Gas:
@@ -96,12 +97,13 @@ public static class Fika
         
         Core.ZoneResults.Clear();
 
-        if (Core.HazardGroups == null)
+        
+        if (Core.ZoneWillSpawn == null)
         {
-            Core.HazardGroups = new ConcurrentDictionary<string, HazardGroup>();
+            Core.ZoneWillSpawn = new ConcurrentDictionary<string, bool>();
         }
         
-        Core.HazardGroups.Clear();
+        Core.ZoneWillSpawn.Clear();
 
         var map = ((CoopGame)@event.Game).Location_0.Id.ToLower();
         

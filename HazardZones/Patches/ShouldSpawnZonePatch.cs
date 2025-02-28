@@ -41,6 +41,16 @@ public class ShouldSpawnZonePatch : ModulePatch
             Plugin.REAL_Logger.LogInfo($"Running zone checks for {zoneKey}");
             return true;
         }
+
+        if (FikaBackendUtils.IsClient && Core.ZoneWillSpawn.ContainsKey(zoneKey))
+        {
+            Plugin.REAL_Logger.LogInfo($"zone already spawned for client: {zoneKey}");
+            // the zone has already spawned. Force it off.
+            __result = false;
+            
+            // don't run original method
+            return false;
+        }
         
         // only let original method run **if we have a result already stored and the result stored is true**
         Core.ZoneResults.TryGetValue(zoneKey, out var result);
@@ -58,15 +68,23 @@ public class ShouldSpawnZonePatch : ModulePatch
     {
         var zoneKey = Core.GenerateZoneKey(hazardLocation, zoneType);
         Core.ZoneResults.TryGetValue(zoneKey, out var spawnZone);
-        
- 
+
+        if (FikaBackendUtils.IsClient && Core.ZoneWillSpawn.ContainsKey(zoneKey))
+        {
+            // we already said that this zone should spawn, don't let it double spawn...
+            Plugin.REAL_Logger.LogInfo($"Already spawned {zoneKey}");
+            __result = false;
+            return;
+        }
+    
         if (FikaBackendUtils.IsClient && !spawnZone)
         {
             // force a false on our result preventing the hazard zone from spawning
             // when the spawn packet comes in, this method will run again and hopefully
             // with the right data populated will run 
-            Plugin.REAL_Logger.LogInfo($"Forcing no spawn for  {zoneKey} as there is no result cached");
+            Plugin.REAL_Logger.LogInfo($"Forcing no spawn for  {zoneKey} as it is unknown if this zone should spawn");
             __result = false;
+            return;
         }
         
         // if we are the host, we are going to store this result and send it out via a packet to all connected clients
@@ -86,7 +104,12 @@ public class ShouldSpawnZonePatch : ModulePatch
                 
                 Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
             }
-          
-        } 
+        }
+
+        // we are client and the output of ShouldSpawnZone = true
+        if (FikaBackendUtils.IsClient && __result)
+        {
+            Core.ZoneWillSpawn.AddOrUpdate(zoneKey, true, (s, b) => true);
+        }
     }
 }

@@ -14,11 +14,13 @@ public static class Core
     // a packet will take care of populating this information for clients
     public static ConcurrentDictionary<string, bool> ZoneResults;
     public static ConcurrentDictionary<string, HazardGroup> HazardGroups;
+    public static ConcurrentDictionary<string, bool> ZoneWillSpawn;
     
     public static void Initialize()
     {
         ZoneResults = new ConcurrentDictionary<string, bool>();
         HazardGroups = new ConcurrentDictionary<string, HazardGroup>();
+        ZoneWillSpawn = new ConcurrentDictionary<string, bool>();
         
     }
     
