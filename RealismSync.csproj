@@ -87,6 +87,7 @@
     <Compile Include="HazardZones\Fika.cs" />
     <Compile Include="HazardZones\Packets\RealismHazardPacket.cs" />
     <Compile Include="HazardZones\Patch.cs" />
+    <Compile Include="HazardZones\Patches\PlayGeigerClipsPatch.cs" />
     <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

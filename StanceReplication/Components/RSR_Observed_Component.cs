@@ -22,16 +22,22 @@ namespace RealismModSync.StanceReplication.Components
         Quaternion _targetRotation = Quaternion.identity;
         ObservedCoopPlayer _observedCoopPlayer;
 
+        private int _netId = 0;
+
         private void Start()
         {
             _observedCoopPlayer = GetComponent<ObservedCoopPlayer>();
             _observedCoopPlayer.OnPlayerDead += DeleteThis;
+            _netId = _observedCoopPlayer.NetId;
             Core.ObservedComponents.AddOrUpdate(_observedCoopPlayer.NetId, this, ((netID, component) => this));
         }
 
         private void DeleteThis(EFT.Player player, EFT.IPlayer lastAggressor, DamageInfoStruct damageInfo, EBodyPart part)
         {
-            _observedCoopPlayer.OnPlayerDead -= DeleteThis;
+            if(_observedCoopPlayer != null) {
+                _observedCoopPlayer.OnPlayerDead -= DeleteThis;
+            }
+            
             Destroy(this);
         }
 
@@ -47,7 +53,12 @@ namespace RealismModSync.StanceReplication.Components
             
             if (_observedCoopPlayer == null)
             {
-                Plugin.REAL_Logger.LogInfo($"No observed coop player inside RSR Observed Component.");
+                Plugin.REAL_Logger.LogInfo($"No observed coop player (Net ID: {_netId}) inside RSR Observed Component.");
+                // we need to get rid of this component 
+                // attempt to destroy
+                Plugin.REAL_Logger.LogInfo($"Attempting to destroy observed coop player tied to net id: {_netId}");
+                Destroy(this);
+                
                 return;
             }
 

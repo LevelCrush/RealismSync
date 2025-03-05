@@ -23,6 +23,8 @@ namespace RealismModSync.StanceReplication.Patches
         {
             if (__result.IsObservedAI && !Config.EnableForBots.Value) return;
             __result.gameObject.AddComponent<RSR_Observed_Component>();
+            
+            
         }
     }
 }
