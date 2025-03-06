@@ -25,6 +25,7 @@ public class HandleZoneLootPatch : ModulePatch
     [PatchPrefix]
     public static bool Patch(HazardGroup zone)
     {
+        
         if (FikaBackendUtils.IsClient)
         {
             Plugin.REAL_Logger.LogInfo("Clients do not generate loot in zones");

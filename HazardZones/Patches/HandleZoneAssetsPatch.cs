@@ -24,6 +24,7 @@ public class HandleZoneAssetsPatch : ModulePatch
     [PatchPrefix]
     public static bool Patch(HazardGroup zone)
     {
+        
         if (FikaBackendUtils.IsClient)
         {
             Plugin.REAL_Logger.LogInfo("Clients do not choose where to spawn assets");

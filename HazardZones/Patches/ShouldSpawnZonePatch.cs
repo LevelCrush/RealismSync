@@ -22,6 +22,9 @@ public class ShouldSpawnZonePatch : ModulePatch
     [PatchPrefix]
     public static bool Prefix(ref bool __runOriginal, HazardGroup hazardLocation, EZoneType zoneType, ref bool __result)
     {
+        
+        
+        
         // if there are other patches that have already said don't let the original run. 
         // respect it and cancel out
         if (!__runOriginal)
@@ -29,7 +32,7 @@ public class ShouldSpawnZonePatch : ModulePatch
             Plugin.REAL_Logger.LogWarning($"Honoring the previous prefix original method skip. No modification will take place");
             return false;
         }
-    
+        
         // generate key for this hazard location group
         var zoneKey = Core.GenerateZoneKey(hazardLocation, zoneType);
         
