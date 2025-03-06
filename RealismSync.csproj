@@ -88,9 +88,11 @@
     <Compile Include="HazardZones\Config.cs" />
     <Compile Include="HazardZones\Core.cs" />
     <Compile Include="HazardZones\Fika.cs" />
+    <Compile Include="HazardZones\Packets\RealismAssetPacket.cs" />
     <Compile Include="HazardZones\Packets\RealismHazardPacket.cs" />
     <Compile Include="HazardZones\Packets\RealismLootPacket.cs" />
     <Compile Include="HazardZones\Patch.cs" />
+    <Compile Include="HazardZones\Patches\HandleZoneAssetsPatch.cs" />
     <Compile Include="HazardZones\Patches\HandleZoneLootPatch.cs" />
     <Compile Include="HazardZones\Patches\PlayGeigerClipsPatch.cs" />
     <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />

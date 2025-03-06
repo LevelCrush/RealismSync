@@ -9,5 +9,6 @@ public static class Patch
     {
         new ShouldSpawnZonePatch().Enable();
         new HandleZoneLootPatch().Enable();
+        new HandleZoneAssetsPatch().Enable();
     }
 }

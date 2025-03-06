@@ -44,6 +44,16 @@ public static class Core
         var zoneKey = $"{zoneType}||{zoneNames}";
         return zoneKey;
     }
+
+    public static void LoadAsset(string assetName, Vector3 position, Vector3 rotation)
+    {
+        GameObject assetPrefab = ZoneSpawner.GetAndLoadAsset(assetName);
+        if (assetPrefab == null) 
+        {
+            Plugin.REAL_Logger.LogError("RealismSync Mod: Error Loading Asset From Bundle For Asset: " + assetName);
+        }
+        GameObject spawnedAsset = UnityEngine.Object.Instantiate(assetPrefab, position, Quaternion.Euler(rotation));
+    }
     
     public static async Task LoadLooseLoot(Vector3 position, Vector3 rotation, string templateID, string mongoID)
     {

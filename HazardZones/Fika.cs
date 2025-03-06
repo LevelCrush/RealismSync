@@ -31,8 +31,15 @@ public static class Fika
             case FikaClient client:
                 client.RegisterPacket<RealismHazardPacket>(HandleHazardPacket);
                 client.RegisterPacket<RealismLootPacket>(HandleLootPacket);
+                client.RegisterPacket<RealismAssetPacket>(HandleAssetPacket);
                 break;
         }
+    }
+
+    private static void HandleAssetPacket(RealismAssetPacket packet)
+    {
+        Plugin.REAL_Logger.LogInfo($"Received asset packet: {packet.AssetName} at position {packet.Position} rotation {packet.Rotation}");
+        Core.LoadAsset(packet.AssetName, packet.Position, packet.Rotation);
     }
 
     private static void HandleLootPacket(RealismLootPacket packet)
