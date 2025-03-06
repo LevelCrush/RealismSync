@@ -41,6 +41,9 @@
     <Reference Include="0Harmony">
       <HintPath>References\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>References\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RealismMod">
       <HintPath>References\RealismMod.dll</HintPath>
     </Reference>
@@ -86,7 +89,9 @@
     <Compile Include="HazardZones\Core.cs" />
     <Compile Include="HazardZones\Fika.cs" />
     <Compile Include="HazardZones\Packets\RealismHazardPacket.cs" />
+    <Compile Include="HazardZones\Packets\RealismLootPacket.cs" />
     <Compile Include="HazardZones\Patch.cs" />
+    <Compile Include="HazardZones\Patches\HandleZoneLootPatch.cs" />
     <Compile Include="HazardZones\Patches\PlayGeigerClipsPatch.cs" />
     <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />
     <Compile Include="Plugin.cs" />
@@ -102,6 +107,7 @@
     <Compile Include="StanceReplication\Patches\CoopPlayer_Create_Patch.cs" />
     <Compile Include="StanceReplication\Patches\ObservedCoopPlayer_Create_Patch.cs" />
     <Compile Include="StanceReplication\Patches\RealismLeftShoulderSwapPatch.cs" />
+    <Compile Include="ToolsAndUtils\Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

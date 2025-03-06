@@ -1,7 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RealismMod;
 using RealismModSync.StanceReplication.Components;
+using UnityEngine;
 
 namespace RealismModSync.HazardZones;
 
@@ -31,11 +36,18 @@ public static class Core
         var zoneNamesList = new List<string>();
         for (var i = 0; i < hazardLocation.Zones.Count; i++)
         {
+            
             zoneNamesList.Add($"{i}.{hazardLocation.Zones[i].Name}");
         }
         
         var zoneNames = string.Join("-", zoneNamesList);
-        var zoneKey = $"({(int)zoneType}||{zoneNames})";
+        var zoneKey = $"{zoneType}||{zoneNames}";
         return zoneKey;
+    }
+    
+    public static async Task LoadLooseLoot(Vector3 position, Vector3 rotation, string templateID, string mongoID)
+    {
+        Quaternion quat = Quaternion.Euler(rotation);
+        await RealismModSync.Utils.LoadLoot(position, quat,templateID, mongoID);
     }
 }

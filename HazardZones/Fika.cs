@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using ChartAndGraph;
 using Comfort.Common;
 using EFT;
@@ -29,8 +30,15 @@ public static class Fika
         {
             case FikaClient client:
                 client.RegisterPacket<RealismHazardPacket>(HandleHazardPacket);
+                client.RegisterPacket<RealismLootPacket>(HandleLootPacket);
                 break;
         }
+    }
+
+    private static void HandleLootPacket(RealismLootPacket packet)
+    {
+        Plugin.REAL_Logger.LogInfo($"Received loot packet: {packet.MongoID} at {packet.Position}|{packet.Rotation} of template {packet.TemplateId}");
+        Core.LoadLooseLoot(packet.Position, packet.Rotation, packet.TemplateId, packet.MongoID);
     }
 
     private static void HandleHazardPacket(RealismHazardPacket packet)
