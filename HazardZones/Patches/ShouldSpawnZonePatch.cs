@@ -23,8 +23,6 @@ public class ShouldSpawnZonePatch : ModulePatch
     public static bool Prefix(ref bool __runOriginal, HazardGroup hazardLocation, EZoneType zoneType, ref bool __result)
     {
         
-        
-        
         // if there are other patches that have already said don't let the original run. 
         // respect it and cancel out
         if (!__runOriginal)
@@ -60,8 +58,8 @@ public class ShouldSpawnZonePatch : ModulePatch
         // short circuit and force this result
         __result = result;
     
-        // if we had a cache result, run the original method. overwriting what we put into __result. Otherwise skip and return what we put into __result
-        return result;
+        // as a client. Never run the original method
+        return false;
     }
 
     [PatchPostfix]
@@ -110,6 +108,7 @@ public class ShouldSpawnZonePatch : ModulePatch
         // we are client and the output of ShouldSpawnZone = true
         if (FikaBackendUtils.IsClient && __result)
         {
+            Plugin.REAL_Logger.LogInfo($"{zoneKey} is allowed to spawn");
             Core.ZoneWillSpawn.AddOrUpdate(zoneKey, true, (s, b) => true);
         }
     }

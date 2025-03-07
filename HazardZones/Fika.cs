@@ -89,19 +89,24 @@ public static class Fika
         {
             case EZoneType.Gas:
             case EZoneType.GasAssets:
+                Plugin.REAL_Logger.LogInfo($"Spawning Gas Zone/Gas Assets: {packet.ZoneKey}");
                 ZoneSpawner.CreateZone<GasZone>(hazardGroup, packet.ZoneType);
                 break;
             case EZoneType.Radiation:
             case EZoneType.RadAssets:
+                Plugin.REAL_Logger.LogInfo($"Spawning Radiation Zone/Radiation Assets: {packet.ZoneKey}");
                 ZoneSpawner.CreateZone<RadiationZone>(hazardGroup, packet.ZoneType);
                 break;
             case EZoneType.Interactable:
+                Plugin.REAL_Logger.LogInfo($"Spawning Interactable Zones at : {packet.ZoneKey}");
                 ZoneSpawner.CreateZone<InteractionZone>(hazardGroup, EZoneType.Interactable);
                 break;
             case EZoneType.SafeZone:
+                Plugin.REAL_Logger.LogInfo($"Spawning Safe Zones at: {packet.ZoneKey}");
                 ZoneSpawner.CreateZone<LabsSafeZone>(hazardGroup, EZoneType.SafeZone);
                 break;
             case EZoneType.Quest:
+                Plugin.REAL_Logger.LogInfo($"Spawning Quest Zones at: {packet.ZoneKey}");
                 ZoneSpawner.CreateZone<QuestZone>(hazardGroup, EZoneType.Quest);
                 break;
             default:
