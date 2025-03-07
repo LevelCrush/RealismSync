@@ -12,6 +12,9 @@ public static class Patch
             new ShouldSpawnZonePatch().Enable();
             new HandleZoneLootPatch().Enable();
             new HandleZoneAssetsPatch().Enable();
+            new DoMapGasEventPatch().Enable();
+            new DoMapRadPatch().Enable();
+            new RunReInitPlayerPatch().Enable();
         }
     }
 }

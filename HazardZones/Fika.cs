@@ -32,8 +32,29 @@ public static class Fika
                 client.RegisterPacket<RealismHazardPacket>(HandleHazardPacket);
                 client.RegisterPacket<RealismLootPacket>(HandleLootPacket);
                 client.RegisterPacket<RealismAssetPacket>(HandleAssetPacket);
+                client.RegisterPacket<RealismGasEventPacket>(HandleGasEvent);
+                client.RegisterPacket<RealismMapRadPacket>(HandleMapRadPacket);
                 break;
         }
+    }
+
+    private static void HandleGasEvent(RealismGasEventPacket packet)
+    {
+        // mirror what Realism Mod is doing
+        Plugin.REAL_Logger.LogInfo("Starting Gas Event");
+        Core.DoMapGasEvent = true;
+        Player player = RealismMod.Utils.GetYourPlayer();
+        AudioController.CreateAmbientAudioPlayer(player, player.gameObject.transform, RealismMod.Plugin.GasEventAudioClips, volume: 1.2f, minDelayBeforePlayback: 60f); //spooky short playback
+        AudioController.CreateAmbientAudioPlayer(player, player.gameObject.transform, RealismMod.Plugin.GasEventLongAudioClips, true, 5f, 30f, 0.2f, 55f, 65f, minDelayBeforePlayback: 0f); //long ambient
+    }
+
+    private static void HandleMapRadPacket(RealismMapRadPacket packet)
+    {
+        // mirror what Realism Mod is doing 
+        Plugin.REAL_Logger.LogInfo($"Starting Map Radiation");
+        Core.DoMapRad = true;
+        Player player = RealismMod.Utils.GetYourPlayer();
+        RealismMod.AudioController.CreateAmbientAudioPlayer(player, player.gameObject.transform, RealismMod.Plugin.RadEventAudioClips, volume: 1f, minDelayBeforePlayback: 60f); //thunder
     }
 
     private static void HandleAssetPacket(RealismAssetPacket packet)
@@ -68,7 +89,7 @@ public static class Fika
         {
             case EZoneType.Gas:
             case EZoneType.GasAssets:
-                ZoneSpawner.CreateZone<GasZone>(hazardGroup, EZoneType.Gas);
+                ZoneSpawner.CreateZone<GasZone>(hazardGroup, packet.ZoneType);
                 break;
             case EZoneType.Radiation:
             case EZoneType.RadAssets:
@@ -120,6 +141,10 @@ public static class Fika
         }
         
         Core.ZoneWillSpawn.Clear();
+
+        // make sure this is set to false. This only impacts Fika Clients realistically
+        Core.DoMapGasEvent = false;
+        Core.DoMapRad = false;
 
         var map = ((CoopGame)@event.Game).Location_0.Id.ToLower();
         

@@ -16,9 +16,6 @@ public static class Fika
     {
         FikaEventDispatcher.SubscribeEvent<FikaNetworkManagerCreatedEvent>(NetworkManagerCreated);
         FikaEventDispatcher.SubscribeEvent<FikaGameCreatedEvent>(GameWorldStarted);
-        
-        
-        
     }
 
     private static void NetworkManagerCreated(FikaNetworkManagerCreatedEvent @event)

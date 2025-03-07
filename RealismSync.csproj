@@ -76,6 +76,9 @@
     <Reference Include="UnityEngine">
       <HintPath>References\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>References\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>References\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -89,12 +92,16 @@
     <Compile Include="HazardZones\Core.cs" />
     <Compile Include="HazardZones\Fika.cs" />
     <Compile Include="HazardZones\Packets\RealismAssetPacket.cs" />
+    <Compile Include="HazardZones\Packets\RealismGasEventPacket.cs" />
     <Compile Include="HazardZones\Packets\RealismHazardPacket.cs" />
     <Compile Include="HazardZones\Packets\RealismLootPacket.cs" />
+    <Compile Include="HazardZones\Packets\RealismMapRadPacket.cs" />
     <Compile Include="HazardZones\Patch.cs" />
+    <Compile Include="HazardZones\Patches\DoMapGasEventPatch.cs" />
+    <Compile Include="HazardZones\Patches\DoMapRadPatch.cs" />
     <Compile Include="HazardZones\Patches\HandleZoneAssetsPatch.cs" />
     <Compile Include="HazardZones\Patches\HandleZoneLootPatch.cs" />
-    <Compile Include="HazardZones\Patches\PlayGeigerClipsPatch.cs" />
+    <Compile Include="HazardZones\Patches\RunReInitPlayerPatch.cs" />
     <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

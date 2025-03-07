@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using EFT;
+using Fika.Core.Coop.Utils;
 using Newtonsoft.Json;
 using RealismMod;
 using RealismModSync.StanceReplication.Components;
@@ -20,13 +22,41 @@ public static class Core
     public static ConcurrentDictionary<string, bool> ZoneResults;
     public static ConcurrentDictionary<string, HazardGroup> HazardGroups;
     public static ConcurrentDictionary<string, bool> ZoneWillSpawn;
+
+    private static bool _doMapGasEvent;
+    private static bool _doMapRad;
+    
+    public static bool DoMapGasEvent
+    {
+        get
+        {
+            return FikaBackendUtils.IsServer ? GameWorldController.DoMapGasEvent : _doMapGasEvent;
+        }
+        internal set
+        {
+            _doMapGasEvent = value;
+        }
+    }
+
+    public static bool DoMapRad
+    {
+        get
+        {
+            return FikaBackendUtils.IsServer ? GameWorldController.DoMapRads : _doMapRad;
+        }
+        internal set
+        {
+            _doMapRad = value;
+        }
+    }
     
     public static void Initialize()
     {
         ZoneResults = new ConcurrentDictionary<string, bool>();
         HazardGroups = new ConcurrentDictionary<string, HazardGroup>();
         ZoneWillSpawn = new ConcurrentDictionary<string, bool>();
-        
+        _doMapGasEvent = false;
+
     }
     
     
@@ -36,7 +66,6 @@ public static class Core
         var zoneNamesList = new List<string>();
         for (var i = 0; i < hazardLocation.Zones.Count; i++)
         {
-            
             zoneNamesList.Add($"{i}.{hazardLocation.Zones[i].Name}");
         }
         
