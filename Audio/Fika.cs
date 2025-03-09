@@ -11,6 +11,8 @@ using Fika.Core.Modding.Events;
 using Fika.Core.Networking;
 using LiteNetLib;
 using RealismMod;
+using RealismModSync.Audio.Components;
+using RealismModSync.Audio.Packets;
 using RealismModSync.HazardZones.Packets;
 using RealismModSync.StanceReplication.Components;
 using RealismModSync.StanceReplication.Packets;
@@ -32,21 +34,58 @@ public static class Fika
         switch (@event.Manager)
         {
             case FikaServer server:
-                // todo fill
+                server.RegisterPacket<RealismAudioPacket, NetPeer>(HandleRealismAudioPacketServer);
                 break;
             case FikaClient client:
-                // todo fill
+                client.RegisterPacket<RealismAudioPacket>(HandleRealismAudioPacket);
                 break;
         }
         
     }
 
-    
-    private static void GameWorldStarted(FikaGameCreatedEvent @event)
+    private static void HandleRealismAudioPacketServer(RealismAudioPacket packet, NetPeer peer)
     {
-        Plugin.REAL_Logger.LogInfo("Initializing Audio");
-
+        HandleRealismAudioPacket(packet);
+        Plugin.REAL_Logger.LogInfo($"Rebroading audio packet: {packet.Clip} from {packet.NetID} for device {packet.DeviceType}");
+        Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
     }
 
-    
+    private static void HandleRealismAudioPacket(RealismAudioPacket packet)
+    {
+        Core.ObservedComponents.TryGetValue(packet.NetID, out var observedComponent);
+        if (observedComponent == null)
+        {
+            Plugin.REAL_Logger.LogInfo($"Could not find observed audio component for {packet.NetID}");
+            return;
+        }
+        
+        Plugin.REAL_Logger.LogInfo($"Processing audio packet: {packet.Clip} from {packet.NetID} for device {packet.DeviceType}");
+        
+        switch (packet.DeviceType)
+        {
+            case RealismDeviceType.Geiger:
+                observedComponent.PlayGeigerClips(packet.Clip, packet.Volume);
+                break;
+            case RealismDeviceType.GasAnalyzer:
+                observedComponent.PlayGasAnalyserClips(packet.Clip, packet.Volume);
+                break;
+            default:
+                Plugin.REAL_Logger.LogInfo($"Unknown device type {packet.DeviceType}");
+                break;
+        }
+    }
+
+
+    private static void GameWorldStarted(FikaGameCreatedEvent @event)
+    {
+        Plugin.REAL_Logger.LogInfo("Clearing audio components");
+        if (Core.ObservedComponents != null)
+        {
+            Core.ObservedComponents.Clear();
+        }
+        else
+        {
+            Core.ObservedComponents = new ConcurrentDictionary<int, RSAObservedComponent>();
+        }
+    }
 }

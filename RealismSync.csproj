@@ -87,11 +87,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\Components\RSAComponent.cs" />
+    <Compile Include="Audio\Components\RSAObservedComponent.cs" />
     <Compile Include="Audio\Config.cs" />
     <Compile Include="Audio\Core.cs" />
+    <Compile Include="Audio\Enums.cs" />
     <Compile Include="Audio\Fika.cs" />
+    <Compile Include="Audio\Packets\RealismAudioPacket.cs" />
     <Compile Include="Audio\Patch.cs" />
+    <Compile Include="Audio\Patches\ObservedCoopPlayerCreatePatch.cs" />
+    <Compile Include="Audio\Patches\PlayGasAnalyserClipPatch.cs" />
+    <Compile Include="Audio\Patches\PlayGeigerClipPatch.cs" />
     <Compile Include="ConfigurationManagerAttributes.cs" />
     <Compile Include="HazardZones\Config.cs" />
     <Compile Include="HazardZones\Core.cs" />

@@ -1,4 +1,6 @@
-﻿namespace RealismModSync.Audio;
+﻿using RealismModSync.Audio.Patches;
+
+namespace RealismModSync.Audio;
 
 public static class Patch
 {
@@ -6,7 +8,9 @@ public static class Patch
     {
         if (Config.Enabled.Value)
         {
-            // todo 
+            new ObservedCoopPlayerCreatePatch().Enable();
+            new PlayGeigerClipPatch().Enable();
+            new PlayGasAnalyserClipPatch().Enable();
         }
     }
 }
