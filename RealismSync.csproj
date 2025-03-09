@@ -87,6 +87,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\Config.cs" />
+    <Compile Include="Audio\Core.cs" />
+    <Compile Include="Audio\Fika.cs" />
+    <Compile Include="Audio\Patch.cs" />
     <Compile Include="ConfigurationManagerAttributes.cs" />
     <Compile Include="HazardZones\Config.cs" />
     <Compile Include="HazardZones\Core.cs" />
