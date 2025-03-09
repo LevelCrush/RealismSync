@@ -6,13 +6,16 @@ public static class Patch
 {
     public static void Awake()
     {
-        new CoopPlayer_Create_Patch().Enable();
-        new ObservedCoopPlayer_Create_Patch().Enable();
-        new RealismLeftShoulderSwapPatch().Enable();
-        
-        if (Config.EnableForBots.Value)
+        if (Config.Enabled.Value)
         {
-            new CoopBot_Create_Patch().Enable();
+            new CoopPlayer_Create_Patch().Enable();
+            new ObservedCoopPlayer_Create_Patch().Enable();
+            new RealismLeftShoulderSwapPatch().Enable();
+
+            if (Config.EnableForBots.Value)
+            {
+                new CoopBot_Create_Patch().Enable();
+            }
         }
 
     }

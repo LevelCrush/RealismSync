@@ -6,6 +6,7 @@ namespace RealismModSync.StanceReplication;
     
 public static class Config
 {
+    public static ConfigEntry<bool> Enabled { get; set; }
     public static ConfigEntry<bool> EnableForBots { get; set; }
     public static ConfigEntry<bool> EnableShoulderSwap { get; set; }
         
@@ -16,6 +17,8 @@ public static class Config
 
     public static void Bind(ConfigFile config)
     {
+        Enabled = config.Bind<bool>(SECTION, "Enable Stance Replication", true, new ConfigDescription("Requires Restart. Toggles replication module. All clients must have this off.Otherwise issues will occur.", null, new ConfigurationManagerAttributes { Order = 0 }));
+
         EnableForBots = config.Bind<bool>(SECTION, "Enable Stance Replication For Bots", true, new ConfigDescription("Requires Restart. Toggles replication for bots. Disabling can help improve performance if there are any issues.", null, new ConfigurationManagerAttributes { Order = 1 }));
         EnableShoulderSwap = config.Bind<bool>(SECTION, "Enable Player Shoulder Swap Replication", true,
             new ConfigDescription(
