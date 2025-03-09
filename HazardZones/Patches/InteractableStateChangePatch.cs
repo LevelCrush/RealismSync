@@ -30,7 +30,7 @@ public class InteractableStateChangePatch : ModulePatch
             InteractableState = newState,
         };
     
-        Plugin.REAL_Logger.LogInfo($"Broadcasting packet: {packet.Path}, with state { packet.InteractableState}");
+        Plugin.REAL_Logger.LogInfo($"Broadcasting interaction packet: {packet.Path}, with state { packet.InteractableState}");
         
         if (FikaBackendUtils.IsServer)
         {

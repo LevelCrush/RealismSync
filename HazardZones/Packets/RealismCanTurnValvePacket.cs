@@ -1,24 +1,25 @@
 ﻿using System.Diagnostics;
 using LiteNetLib.Utils;
+using RealismMod;
 
 namespace RealismModSync.HazardZones.Packets;
 
-public class RealismRotateStuckPacket : INetSerializable
+public class RealismCanTurnValvePacket : INetSerializable
 {
 
-    public float Direction;
+    public EInteractableState NextState;
     public string Path;
 
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(Path);
-        writer.Put(Direction);
+        writer.Put((int)NextState);
     }
 
     public void Deserialize(NetDataReader reader)
     {
         Path = reader.GetString();
-        Direction = reader.GetFloat();
+        NextState = (EInteractableState)reader.GetInt();
     }
     
 }

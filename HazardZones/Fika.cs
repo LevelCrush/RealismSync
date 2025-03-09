@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Reflection;
 using System.Threading.Tasks;
 using ChartAndGraph;
 using Comfort.Common;
@@ -32,6 +33,7 @@ public static class Fika
         {
             case FikaServer server:
                 server.RegisterPacket<RealismInteractablePacket, NetPeer>(HandleInteractionChangeServer);
+                server.RegisterPacket<RealismCanTurnValvePacket, NetPeer>(HandleCanTurnValvePacketServer);
                 break;
             case FikaClient client:
                 client.RegisterPacket<RealismHazardPacket>(HandleHazardPacket);
@@ -40,8 +42,54 @@ public static class Fika
                 client.RegisterPacket<RealismGasEventPacket>(HandleGasEvent);
                 client.RegisterPacket<RealismMapRadPacket>(HandleMapRadPacket);
                 client.RegisterPacket<RealismInteractablePacket>(HandleInteractionChangeClient);
+                client.RegisterPacket<RealismCanTurnValvePacket>(HandleCanTurnValvePacketClient);
                 break;
         }
+        
+    }
+
+    private static void HandleCanTurnValvePacketServer(RealismCanTurnValvePacket packet, NetPeer peer)
+    {
+        HandleCanTurnValvePacket(packet);
+        
+        // rebroadcast to other clients except the sender
+        Plugin.REAL_Logger.LogInfo($"Rebroadcasting can turn valve   packet to clients: {packet.Path} with value {packet.NextState}");
+        Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered, peer);
+        
+    }
+    
+    private static void HandleCanTurnValvePacketClient(RealismCanTurnValvePacket packet)
+    {
+        HandleCanTurnValvePacket(packet);
+    }
+
+    private static void HandleCanTurnValvePacket(RealismCanTurnValvePacket packet)
+    {
+        Plugin.REAL_Logger.LogInfo($"Processing rotate stuck packet: {packet.Path}, adjusting to {packet.NextState}");
+
+        var zoneObject = GameObject.Find(packet.Path);
+        if (zoneObject == null)
+        {
+            Plugin.REAL_Logger.LogError($"Could not find zone object: {packet.Path}");
+            return;
+        }
+        
+        var zone = zoneObject.GetComponent<InteractionZone>();
+        if (zone == null)
+        {
+            Plugin.REAL_Logger.LogInfo($"Zone {packet.Path} could not be fetched");
+            return;
+        }
+        
+        
+        // can turn valve call. Use reflection to get the method
+        Plugin.REAL_Logger.LogInfo($"Attempting to call CanTurnValve on zone: {packet.Path}");
+        var targetMethod = typeof(InteractionZone).GetMethod("CanTurnValve", BindingFlags.Instance | BindingFlags.NonPublic);
+        if (targetMethod == null)
+        {
+            Plugin.REAL_Logger.LogError($"Could not find CanTurnValve on {packet.Path}");
+        }
+        targetMethod?.Invoke(zone, [packet.NextState]);
     }
 
     private static void HandleInteractionChangeServer(RealismInteractablePacket packet, NetPeer peer)
@@ -62,17 +110,14 @@ public static class Fika
     {
         Plugin.REAL_Logger.LogInfo($"Processing interaction change packet: {packet.Path}, adjusting to {packet.InteractableState}");
         
-        var zoneObject= GameObject.Find(packet.Path);
-
+        var zoneObject = GameObject.Find(packet.Path);
         if (zoneObject == null)
         {
             Plugin.REAL_Logger.LogError($"Could not find zone object: {packet.Path}");
             return;
         }
-        
+
         var zone = zoneObject.GetComponent<InteractionZone>();
-        
-        
         if (zone == null)
         {
             Plugin.REAL_Logger.LogInfo($"Zone {packet.Path} could not be fetched");

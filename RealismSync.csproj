@@ -97,13 +97,14 @@
     <Compile Include="HazardZones\Packets\RealismInteractablePacket.cs" />
     <Compile Include="HazardZones\Packets\RealismLootPacket.cs" />
     <Compile Include="HazardZones\Packets\RealismMapRadPacket.cs" />
-    <Compile Include="HazardZones\Packets\RealismRotateStuckPacket.cs" />
+    <Compile Include="HazardZones\Packets\RealismCanTurnValvePacket.cs" />
     <Compile Include="HazardZones\Patch.cs" />
     <Compile Include="HazardZones\Patches\DoMapGasEventPatch.cs" />
     <Compile Include="HazardZones\Patches\DoMapRadPatch.cs" />
     <Compile Include="HazardZones\Patches\HandleZoneAssetsPatch.cs" />
     <Compile Include="HazardZones\Patches\HandleZoneLootPatch.cs" />
     <Compile Include="HazardZones\Patches\InteractableGroupComponentNamePatch.cs" />
+    <Compile Include="HazardZones\Patches\CanTurnValvePatch.cs" />
     <Compile Include="HazardZones\Patches\RunReInitPlayerPatch.cs" />
     <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />
     <Compile Include="HazardZones\Patches\InteractableStateChangePatch.cs" />

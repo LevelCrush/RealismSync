@@ -17,6 +17,7 @@ public static class Patch
             new RunReInitPlayerPatch().Enable();
             new InteractableStateChangePatch().Enable();
             new InteractableGroupComponentNamePatch().Enable();
+           // new CanTurnValvePatch().Enable();
         }
     }
 }
