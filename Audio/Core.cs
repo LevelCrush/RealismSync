@@ -21,5 +21,14 @@ public static class Core
     public static void Initialize()
     {
         ObservedComponents = new ConcurrentDictionary<int, RSAObservedComponent>();
+        
+        Plugin.REAL_Logger.LogInfo($"Patching RealismMod Device Audio clips to have names match key");
+        
+        // loop through the audio clips for Gas An andd Geiger and name them
+        foreach(var (key, audioClip) in RealismMod.Plugin.DeviceAudioClips)
+        {
+            // set the name of the clip to the key
+            audioClip.name = key;
+        }
     }
 }

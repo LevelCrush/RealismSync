@@ -32,9 +32,6 @@ public class PlayGeigerClipPatch : ModulePatch
             return;
         }
         
-        var netId = coopHandler.MyPlayer.NetId;
-        Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch for {netId}");
-
         if (____geigerAudioSource.clip == null)
         {
             Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch: no gas anaylzer clip");
@@ -55,15 +52,15 @@ public class PlayGeigerClipPatch : ModulePatch
             Volume = ____geigerAudioSource.volume,
             DeviceType = RealismDeviceType.Geiger
         };
-
+    
         if (FikaBackendUtils.IsServer)
         {
-            Plugin.REAL_Logger.LogInfo($"Sending play geiger clip as server");
+            Plugin.REAL_Logger.LogInfo($"Sending {____geigerAudioSource.clip.name} as server");
             Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
         }
         else
         {
-            Plugin.REAL_Logger.LogInfo($"Sending play geiger clip as client");
+            Plugin.REAL_Logger.LogInfo($"Sending {____geigerAudioSource.clip.name} as client");
             Singleton<FikaClient>.Instance.SendData(ref packet, DeliveryMethod.ReliableOrdered);
         }
     }

@@ -29,23 +29,12 @@ public class PlayGasAnalyserClipPatch : ModulePatch
             Plugin.REAL_Logger.LogInfo($"CoopHandler is null in Geiger Clip Patch");
             return;
         }
-
         
-        var netId = coopHandler.MyPlayer.NetId;
-        Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch for {netId}");
-
         if (____gasAnalyserSource.clip == null)
         {
             Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch: no gas anaylzer clip");
             return;
         }
-
-        if (____gasAnalyserSource.clip.name == null)
-        {
-            Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch: no gas anaylzer clip name");
-            return;
-        }
-            
         
         var packet = new RealismAudioPacket()
         {
@@ -57,12 +46,12 @@ public class PlayGasAnalyserClipPatch : ModulePatch
 
         if (FikaBackendUtils.IsServer)
         {
-            Plugin.REAL_Logger.LogInfo($"Sending PlayGasAnalyserClip as server");
+            Plugin.REAL_Logger.LogInfo($"Sending {____gasAnalyserSource.clip.name} as server");
             Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
         }
         else
         {
-            Plugin.REAL_Logger.LogInfo($"Sending PlayGasAnalyserClip as client");
+            Plugin.REAL_Logger.LogInfo($"Sending {____gasAnalyserSource.clip.name} as client");
             Singleton<FikaClient>.Instance.SendData(ref packet, DeliveryMethod.ReliableOrdered);
         }
     }
