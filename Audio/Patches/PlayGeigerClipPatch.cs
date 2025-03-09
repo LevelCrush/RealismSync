@@ -23,7 +23,7 @@ public class PlayGeigerClipPatch : ModulePatch
     }
 
     [PatchPostfix]
-    public static void Patch(RealismAudioControllerComponent __instance, AudioSource ____geigerAudioSource)
+    public static void Patch(RealismAudioControllerComponent __instance, ref AudioSource ____geigerAudioSource)
     {
         CoopHandler.TryGetCoopHandler(out var coopHandler);
         if (coopHandler == null)
@@ -43,24 +43,28 @@ public class PlayGeigerClipPatch : ModulePatch
             Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch: no gas anaylzer clip name");
             return;
         }
-
+    
+        string[] clips = RealismMod.Plugin.RealismAudioControllerComponent.GetGeigerClip(HazardTracker.BaseTotalRadiationRate);
+        if (clips == null) return;
+        int rndNumber = UnityEngine.Random.Range(0, clips.Length);
+        string clip = clips[rndNumber];
         
         var packet = new RealismAudioPacket()
         {
-            NetID =    coopHandler.MyPlayer.NetId,
-            Clip = ____geigerAudioSource.clip.name,
-            Volume = ____geigerAudioSource.volume,
+            NetID = coopHandler.MyPlayer.NetId,
+            Clip = clip,
+            Volume = .32f, // magic number sourced from Realism. Can use reflection to make this more reliable
             DeviceType = RealismDeviceType.Geiger
         };
     
         if (FikaBackendUtils.IsServer)
         {
-            Plugin.REAL_Logger.LogInfo($"Sending {____geigerAudioSource.clip.name} as server");
+            Plugin.REAL_Logger.LogInfo($"Sending {clip} as server");
             Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
         }
         else
         {
-            Plugin.REAL_Logger.LogInfo($"Sending {____geigerAudioSource.clip.name} as client");
+            Plugin.REAL_Logger.LogInfo($"Sending {clip} as client");
             Singleton<FikaClient>.Instance.SendData(ref packet, DeliveryMethod.ReliableOrdered);
         }
     }

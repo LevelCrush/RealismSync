@@ -28,10 +28,12 @@ public class RSAObservedComponent : MonoBehaviour
         
         SetUpAudio(_gasAnalyserSource);
         SetUpAudio(_geigerAudioSource);
+        
+        Core.ObservedComponents.AddOrUpdate(_observedCoopPlayer.NetId, this, ((netID, component) => this));
     }
     
     // copy pasted from RealismMod and adjusted for RealismSync if needed
-    private void SetUpAudio(AudioSource source, float vol = 1f, float spatialBlend = .5f, float minDistance = 1f, float maxDistance = 100f) 
+    private void SetUpAudio(AudioSource source, float vol = 1f, float spatialBlend = 1.0f, float minDistance = 1f, float maxDistance = 100f) 
     {
         source.volume = vol * GameWorldController.GetGameVolumeAsFactor();
         source.spatialBlend = spatialBlend; 

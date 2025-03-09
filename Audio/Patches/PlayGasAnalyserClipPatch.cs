@@ -21,7 +21,7 @@ public class PlayGasAnalyserClipPatch : ModulePatch
     }
 
     [PatchPostfix]
-    public static void Patch(RealismAudioControllerComponent __instance, AudioSource ____gasAnalyserSource)
+    public static void Patch(RealismAudioControllerComponent __instance, ref AudioSource ____gasAnalyserSource)
     {
         CoopHandler.TryGetCoopHandler(out var coopHandler);
         if (coopHandler == null)
@@ -29,6 +29,7 @@ public class PlayGasAnalyserClipPatch : ModulePatch
             Plugin.REAL_Logger.LogInfo($"CoopHandler is null in Geiger Clip Patch");
             return;
         }
+
         
         if (____gasAnalyserSource.clip == null)
         {
@@ -36,22 +37,33 @@ public class PlayGasAnalyserClipPatch : ModulePatch
             return;
         }
         
+        // recreate how realism handles this.
+        // technically I dont need volumeModi.
+        float volumeModi = 1f;
+        string clip = RealismMod.Plugin.RealismAudioControllerComponent.GetGasAnalsyerClip(HazardTracker.BaseTotalToxicityRate, out volumeModi);
+        if (clip == null)
+        {
+            Plugin.REAL_Logger.LogInfo($"Could not detect a suitable gas analyzer clip");
+            return;
+        }
+        
+        //float volume = _muteGasAnalyser ? 0f : GetDeviceVolume(GEIGER_VOLUME, volumeModi);
         var packet = new RealismAudioPacket()
         {
             NetID = coopHandler.MyPlayer.NetId,
-            Clip = ____gasAnalyserSource.clip.name,
-            Volume = ____gasAnalyserSource.volume,
+            Clip = clip,
+            Volume = volumeModi,
             DeviceType = RealismDeviceType.GasAnalyzer
         };
 
         if (FikaBackendUtils.IsServer)
         {
-            Plugin.REAL_Logger.LogInfo($"Sending {____gasAnalyserSource.clip.name} as server");
+            Plugin.REAL_Logger.LogInfo($"Sending {clip} as server with volume {____gasAnalyserSource.volume} ");
             Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
         }
         else
         {
-            Plugin.REAL_Logger.LogInfo($"Sending {____gasAnalyserSource.clip.name} as client");
+            Plugin.REAL_Logger.LogInfo($"Sending {clip} as client with volume {____gasAnalyserSource.volume}");
             Singleton<FikaClient>.Instance.SendData(ref packet, DeliveryMethod.ReliableOrdered);
         }
     }

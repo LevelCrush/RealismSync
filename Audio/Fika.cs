@@ -46,8 +46,8 @@ public static class Fika
     private static void HandleRealismAudioPacketServer(RealismAudioPacket packet, NetPeer peer)
     {
         HandleRealismAudioPacket(packet);
-        Plugin.REAL_Logger.LogInfo($"Rebroading audio packet: {packet.Clip} from {packet.NetID} for device {packet.DeviceType}");
-        Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
+        Plugin.REAL_Logger.LogInfo($"Rebroadcasting audio packet: {packet.Clip} from {packet.NetID} for device {packet.DeviceType}");
+        Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered, peer);
     }
 
     private static void HandleRealismAudioPacket(RealismAudioPacket packet)
@@ -86,6 +86,15 @@ public static class Fika
         else
         {
             Core.ObservedComponents = new ConcurrentDictionary<int, RSAObservedComponent>();
+        }
+        
+        // loop through the audio clips for Gas And Geiger and name them
+        foreach(var (key, audioClip) in RealismMod.Plugin.DeviceAudioClips)
+        {
+            // set the name of the clip to the key
+            var original = audioClip.name;
+            RealismMod.Plugin.DeviceAudioClips[key].name = key;
+            Plugin.REAL_Logger.LogInfo($"Set {key} audio clip name for device from {original}");
         }
     }
 }
