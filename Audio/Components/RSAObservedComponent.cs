@@ -33,14 +33,14 @@ public class RSAObservedComponent : MonoBehaviour
     }
     
     // copy pasted from RealismMod and adjusted for RealismSync if needed
-    private void SetUpAudio(AudioSource source, float vol = 1f, float spatialBlend = 1.0f, float minDistance = 1f, float maxDistance = 15f) 
+    private void SetUpAudio(AudioSource source, float vol = 1f, float spatialBlend = 1.0f, float minDistance = 1f, float maxDistance = 30f) 
     {
         source.volume = vol * GameWorldController.GetGameVolumeAsFactor();
         source.spatialBlend = spatialBlend; 
         source.minDistance = minDistance;
         source.maxDistance = maxDistance;
         source.spatialize = true;
-        source.rolloffMode = AudioRolloffMode.Logarithmic;
+        source.rolloffMode = AudioRolloffMode.Linear;
     }
     
     public void PlayGasAnalyserClips(string clip, float baseVolume)
