@@ -29,14 +29,17 @@ public class InteractableGroupComponentNamePatch : ModulePatch
             names.Add(
                 $"{zone.Name}||{zone.InteractableData.InteractionType}||{zone.InteractableData.TargeObject}||{string.Join(",","zone.InteractableData.ZoneNames")}");
         }
-        
-        var md5 = new MD5CryptoServiceProvider();
-        var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(string.Join("@@", names)));
-        var hashString = BitConverter.ToString(hash).Replace("-", String.Empty).ToLowerInvariant();
-        var newName = $"Interactable{hashString}";
-    
-        Plugin.REAL_Logger.LogInfo($"Changing {__instance.name} to {newName}");
 
-        __instance.name = newName;
+        using (var md5 = new MD5CryptoServiceProvider())
+        {
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(string.Join("@@", names)));
+            var hashString = BitConverter.ToString(hash).Replace("-", String.Empty).ToLowerInvariant();
+            var newName = $"Interactable{hashString}";
+            
+            Plugin.REAL_Logger.LogInfo($"Changing {__instance.name} to {newName}");
+            __instance.name = newName;
+        }
+
+      
     }
 }
