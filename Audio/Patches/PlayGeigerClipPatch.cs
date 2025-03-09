@@ -32,18 +32,6 @@ public class PlayGeigerClipPatch : ModulePatch
             return;
         }
         
-        if (____geigerAudioSource.clip == null)
-        {
-            Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch: no gas anaylzer clip");
-            return;
-        }
-
-        if (____geigerAudioSource.clip.name == null)
-        {
-            Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch: no gas anaylzer clip name");
-            return;
-        }
-    
         string[] clips = RealismMod.Plugin.RealismAudioControllerComponent.GetGeigerClip(HazardTracker.BaseTotalRadiationRate);
         if (clips == null) return;
         int rndNumber = UnityEngine.Random.Range(0, clips.Length);

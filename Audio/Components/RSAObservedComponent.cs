@@ -48,7 +48,7 @@ public class RSAObservedComponent : MonoBehaviour
         if (clip == null) return;
         AudioClip audioClip = RealismMod.Plugin.DeviceAudioClips[clip];
         
-        _gasAnalyserSource.volume = baseVolume;
+        _gasAnalyserSource.volume = baseVolume * GameWorldController.GetGameVolumeAsFactor();
         _gasAnalyserSource.clip = audioClip;
         _gasAnalyserSource.Play();
     }
@@ -56,7 +56,7 @@ public class RSAObservedComponent : MonoBehaviour
     public void PlayGeigerClips(string clip, float baseVolume)
     {
         AudioClip audioClip = RealismMod.Plugin.DeviceAudioClips[clip];
-        _geigerAudioSource.volume = baseVolume;
+        _geigerAudioSource.volume = baseVolume * GameWorldController.GetGameVolumeAsFactor();
         _geigerAudioSource.clip = audioClip;
         _geigerAudioSource.Play();
     } 

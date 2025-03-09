@@ -29,13 +29,7 @@ public class PlayGasAnalyserClipPatch : ModulePatch
             Plugin.REAL_Logger.LogInfo($"CoopHandler is null in Geiger Clip Patch");
             return;
         }
-
         
-        if (____gasAnalyserSource.clip == null)
-        {
-            Plugin.REAL_Logger.LogInfo($"PlayGasAnalyserClip Patch: no gas anaylzer clip");
-            return;
-        }
         
         // recreate how realism handles this.
         // technically I dont need volumeModi.
@@ -47,23 +41,23 @@ public class PlayGasAnalyserClipPatch : ModulePatch
             return;
         }
         
-        //float volume = _muteGasAnalyser ? 0f : GetDeviceVolume(GEIGER_VOLUME, volumeModi);
+        // float volume = _muteGasAnalyser ? 0f : GetDeviceVolume(GEIGER_VOLUME, volumeModi);
         var packet = new RealismAudioPacket()
         {
             NetID = coopHandler.MyPlayer.NetId,
             Clip = clip,
-            Volume = volumeModi,
+            Volume = volumeModi, // magic number sourced from  RealismMod
             DeviceType = RealismDeviceType.GasAnalyzer
         };
 
         if (FikaBackendUtils.IsServer)
         {
-            Plugin.REAL_Logger.LogInfo($"Sending {clip} as server with volume {____gasAnalyserSource.volume} ");
+            Plugin.REAL_Logger.LogInfo($"Sending {packet.Clip} as server with volume {packet.Volume}");
             Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered);
         }
         else
         {
-            Plugin.REAL_Logger.LogInfo($"Sending {clip} as client with volume {____gasAnalyserSource.volume}");
+            Plugin.REAL_Logger.LogInfo($"Sending {packet.Clip} as client with volume {packet.Volume}");
             Singleton<FikaClient>.Instance.SendData(ref packet, DeliveryMethod.ReliableOrdered);
         }
     }

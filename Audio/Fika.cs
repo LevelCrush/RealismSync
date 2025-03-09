@@ -59,7 +59,7 @@ public static class Fika
             return;
         }
         
-        Plugin.REAL_Logger.LogInfo($"Processing audio packet: {packet.Clip} from {packet.NetID} for device {packet.DeviceType}");
+        Plugin.REAL_Logger.LogInfo($"Processing audio packet: {packet.Clip} from {packet.NetID} for device {packet.DeviceType}. Source Volume: {packet.Volume}.");
         
         switch (packet.DeviceType)
         {
