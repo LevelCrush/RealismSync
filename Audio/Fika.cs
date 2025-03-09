@@ -88,6 +88,7 @@ public static class Fika
             Core.ObservedComponents = new ConcurrentDictionary<int, RSAObservedComponent>();
         }
         
+        /* Not needed at this point
         // loop through the audio clips for Gas And Geiger and name them
         foreach(var (key, audioClip) in RealismMod.Plugin.DeviceAudioClips)
         {
@@ -95,6 +96,6 @@ public static class Fika
             var original = audioClip.name;
             RealismMod.Plugin.DeviceAudioClips[key].name = key;
             Plugin.REAL_Logger.LogInfo($"Set {key} audio clip name for device from {original}");
-        }
+        } */
     }
 }
