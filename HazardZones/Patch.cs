@@ -15,6 +15,8 @@ public static class Patch
             new DoMapGasEventPatch().Enable();
             new DoMapRadPatch().Enable();
             new RunReInitPlayerPatch().Enable();
+            new InteractableStateChangePatch().Enable();
+            new InteractableGroupComponentNamePatch().Enable();
         }
     }
 }

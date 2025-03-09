@@ -103,8 +103,10 @@
     <Compile Include="HazardZones\Patches\DoMapRadPatch.cs" />
     <Compile Include="HazardZones\Patches\HandleZoneAssetsPatch.cs" />
     <Compile Include="HazardZones\Patches\HandleZoneLootPatch.cs" />
+    <Compile Include="HazardZones\Patches\InteractableGroupComponentNamePatch.cs" />
     <Compile Include="HazardZones\Patches\RunReInitPlayerPatch.cs" />
     <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />
+    <Compile Include="HazardZones\Patches\InteractableStateChangePatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StanceReplication\Components\RSR_Component.cs" />

@@ -5,21 +5,19 @@ namespace RealismModSync.HazardZones.Packets;
 
 public class RealismRotateStuckPacket : INetSerializable
 {
-    public string ZoneKey;
-    public string InteractionZoneName;
+
     public float Direction;
+    public string Path;
 
     public void Serialize(NetDataWriter writer)
     {
-        writer.Put(ZoneKey);
-        writer.Put(InteractionZoneName);
+        writer.Put(Path);
         writer.Put(Direction);
     }
 
     public void Deserialize(NetDataReader reader)
     {
-        ZoneKey = reader.GetString();
-        InteractionZoneName = reader.GetString();
+        Path = reader.GetString();
         Direction = reader.GetFloat();
     }
     

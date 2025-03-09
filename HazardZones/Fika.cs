@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ChartAndGraph;
 using Comfort.Common;
 using EFT;
+using EFT.Interactive;
 using Fika.Core.Coop.GameMode;
 using Fika.Core.Modding;
 using Fika.Core.Modding.Events;
@@ -12,6 +13,7 @@ using RealismMod;
 using RealismModSync.HazardZones.Packets;
 using RealismModSync.StanceReplication.Components;
 using RealismModSync.StanceReplication.Packets;
+using UnityEngine;
 
 namespace RealismModSync.HazardZones;
 
@@ -28,12 +30,95 @@ public static class Fika
     {
         switch (@event.Manager)
         {
+            case FikaServer server:
+                server.RegisterPacket<RealismInteractablePacket, NetPeer>(HandleInteractionChangeServer);
+                break;
             case FikaClient client:
                 client.RegisterPacket<RealismHazardPacket>(HandleHazardPacket);
                 client.RegisterPacket<RealismLootPacket>(HandleLootPacket);
                 client.RegisterPacket<RealismAssetPacket>(HandleAssetPacket);
                 client.RegisterPacket<RealismGasEventPacket>(HandleGasEvent);
                 client.RegisterPacket<RealismMapRadPacket>(HandleMapRadPacket);
+                client.RegisterPacket<RealismInteractablePacket>(HandleInteractionChangeClient);
+                break;
+        }
+    }
+
+    private static void HandleInteractionChangeServer(RealismInteractablePacket packet, NetPeer peer)
+    {
+        HandleInteractionChangePacket(packet);
+        
+        // rebroadcast to other clients except the sender
+        Plugin.REAL_Logger.LogInfo($"Rebroadcasting interaction change packet to clients: {packet.Path} with value {packet.InteractableState}");
+        Singleton<FikaServer>.Instance.SendDataToAll(ref packet, DeliveryMethod.ReliableOrdered, peer);
+    }
+
+    private static void HandleInteractionChangeClient(RealismInteractablePacket packet)
+    {
+        HandleInteractionChangePacket(packet);
+    }
+
+    private static void HandleInteractionChangePacket(RealismInteractablePacket packet)
+    {
+        Plugin.REAL_Logger.LogInfo($"Processing interaction change packet: {packet.Path}, adjusting to {packet.InteractableState}");
+        
+        var zoneObject= GameObject.Find(packet.Path);
+
+        if (zoneObject == null)
+        {
+            Plugin.REAL_Logger.LogError($"Could not find zone object: {packet.Path}");
+            return;
+        }
+        
+        var zone = zoneObject.GetComponent<InteractionZone>();
+        
+        
+        if (zone == null)
+        {
+            Plugin.REAL_Logger.LogInfo($"Zone {packet.Path} could not be fetched");
+            return;
+        }
+        
+        
+        if(packet.InteractableState == EInteractableState.None)
+        {
+            Plugin.REAL_Logger.LogInfo($"Interactable {packet.InteractableType} state is none? No clue how to sync this yet.");
+            return;
+        }
+        
+
+        
+        switch (packet.InteractableType)
+        {
+            case EIneractableType.Valve:
+                
+                if (packet.InteractableState == EInteractableState.On)
+                {
+                    Plugin.REAL_Logger.LogInfo($"Turning valve on at: {packet.Path}");
+                    zone.TurnONValve();
+                }
+                else if(packet.InteractableState == EInteractableState.Off)
+                {
+                    Plugin.REAL_Logger.LogInfo($"Turning valve off at: {packet.Path}");
+                    zone.TurnOffValve();
+                }
+                
+                break;
+            case EIneractableType.Button:
+                if (packet.InteractableState == EInteractableState.On)
+                {
+                    Plugin.REAL_Logger.LogInfo($"Turning button on at: {packet.Path}");
+                    zone.TurnOnButton();
+                }
+                else if (packet.InteractableState == EInteractableState.Off)
+                {
+                    Plugin.REAL_Logger.LogInfo($"Turning button off at: {packet.Path}");
+                    zone.TurnOffButton();
+                }
+                
+                break;
+            default:
+                Plugin.REAL_Logger.LogError($"Unknown interactable type: {packet.Path} | {packet.InteractableType}");
                 break;
         }
     }
