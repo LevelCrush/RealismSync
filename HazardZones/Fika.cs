@@ -243,13 +243,20 @@ public static class Fika
 
     private static void LoadZones(EZoneType zoneType, string map)
     {
-        Plugin.REAL_Logger.LogInfo($"Loading Realism zones for {map} and type {(int)zoneType}");
+        Plugin.REAL_Logger.LogInfo($"Loading Realism zones for {map} and type {zoneType}");
         var zones = ZoneData.GetZones(zoneType, map);
-        foreach (var zone in zones)
+        if (zones != null)
         {
-            var zoneKey = Core.GenerateZoneKey(zone, zoneType);
-            Plugin.REAL_Logger.LogInfo($"Zone: {zoneKey} is cached");
-            Core.HazardGroups.AddOrUpdate(zoneKey, zone, (s, group) => zone);
+            foreach (var zone in zones)
+            {
+                var zoneKey = Core.GenerateZoneKey(zone, zoneType);
+                Plugin.REAL_Logger.LogInfo($"Zone: {zoneKey} is cached");
+                Core.HazardGroups.AddOrUpdate(zoneKey, zone, (s, group) => zone);
+            }
+        }
+        else
+        {
+            Plugin.REAL_Logger.LogInfo($"Realism returned null for Zone data for zones of type {zoneType} for  {map} could be loaded");
         }
     }
     
