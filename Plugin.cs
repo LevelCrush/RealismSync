@@ -12,7 +12,7 @@ using ChartAndGraph;
 
 namespace RealismModSync
 {
-    [BepInPlugin("RealismMod.Sync", "RealismModSync", "1.0.0")]
+    [BepInPlugin("RealismMod.Sync", "RealismModSync", "1.0.1")]
     [BepInDependency("com.fika.core", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("RealismMod", BepInDependency.DependencyFlags.HardDependency)]
     [BepInIncompatibility("com.lacyway.rsr")]
