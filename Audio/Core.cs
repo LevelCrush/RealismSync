@@ -22,7 +22,7 @@ public static class Core
     {
         ObservedComponents = new ConcurrentDictionary<int, RSAObservedComponent>();
         
-        Plugin.REAL_Logger.LogInfo($"Patching RealismMod Device Audio clips to have names match key");
+        //  Plugin.REAL_Logger.LogInfo($"Patching RealismMod Device Audio clips to have names match key");
         
         
     }

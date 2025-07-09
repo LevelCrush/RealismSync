@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Comfort.Common;
+using Fika.Core.Coop.ClientClasses;
 using Fika.Core.Coop.Components;
 using Fika.Core.Coop.GameMode;
 using Fika.Core.Coop.Players;
@@ -36,14 +37,21 @@ namespace RealismModSync.StanceReplication.Patches
             CoopHandler fikaCoopHandler;
             if (CoopHandler.TryGetCoopHandler(out fikaCoopHandler))
             {
-                var leftStanceChangePacket = new FirearmSubPackets.LeftStanceChangePacket();
-                leftStanceChangePacket.LeftStance = leftShoulder;
+               // var leftStanceChangePacket = new FirearmSubPackets.LeftStanceChangePacket();
+                //leftStanceChangePacket.LeftStance = leftShoulder;
                 
-                fikaCoopHandler.MyPlayer.PacketSender.FirearmPackets.Enqueue(new WeaponPacket()
+                /*
+                var packet = new WeaponPacket()
                 {
+                    NetId =  fikaCoopHandler.MyPlayer.NetId,
                     Type = SubPacket.EFirearmSubPacketType.LeftStanceChange,
-                    SubPacket =  leftStanceChangePacket
-                });
+                    SubPacket = leftStanceChangePacket
+                };
+                
+                fikaCoopHandler.MyPlayer.PacketSender.SendPacket(ref packet); */
+                
+                // this might be all we need now moving forward
+                ((CoopClientFirearmController)fikaCoopHandler.MyPlayer.HandsController).ChangeLeftStance();
             } 
         }
 

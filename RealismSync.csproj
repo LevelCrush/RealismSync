@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -8,12 +8,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>RealismModSync</RootNamespace>
     <AssemblyName>RealismModSync</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />    
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,6 +38,9 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>References\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="DissonanceVoip">
+      <HintPath>References\DissonanceVoip.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>References\Newtonsoft.Json.dll</HintPath>
@@ -86,52 +87,7 @@
       <HintPath>References\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Audio\Components\RSAObservedComponent.cs" />
-    <Compile Include="Audio\Config.cs" />
-    <Compile Include="Audio\Core.cs" />
-    <Compile Include="Audio\Enums.cs" />
-    <Compile Include="Audio\Fika.cs" />
-    <Compile Include="Audio\Packets\RealismAudioPacket.cs" />
-    <Compile Include="Audio\Patch.cs" />
-    <Compile Include="Audio\Patches\ObservedCoopPlayerCreatePatch.cs" />
-    <Compile Include="Audio\Patches\PlayGasAnalyserClipPatch.cs" />
-    <Compile Include="Audio\Patches\PlayGeigerClipPatch.cs" />
-    <Compile Include="ConfigurationManagerAttributes.cs" />
-    <Compile Include="HazardZones\Config.cs" />
-    <Compile Include="HazardZones\Core.cs" />
-    <Compile Include="HazardZones\Fika.cs" />
-    <Compile Include="HazardZones\Packets\RealismAssetPacket.cs" />
-    <Compile Include="HazardZones\Packets\RealismGasEventPacket.cs" />
-    <Compile Include="HazardZones\Packets\RealismHazardPacket.cs" />
-    <Compile Include="HazardZones\Packets\RealismInteractablePacket.cs" />
-    <Compile Include="HazardZones\Packets\RealismLootPacket.cs" />
-    <Compile Include="HazardZones\Packets\RealismMapRadPacket.cs" />
-    <Compile Include="HazardZones\Packets\RealismCanTurnValvePacket.cs" />
-    <Compile Include="HazardZones\Patch.cs" />
-    <Compile Include="HazardZones\Patches\DoMapGasEventPatch.cs" />
-    <Compile Include="HazardZones\Patches\DoMapRadPatch.cs" />
-    <Compile Include="HazardZones\Patches\HandleZoneAssetsPatch.cs" />
-    <Compile Include="HazardZones\Patches\HandleZoneLootPatch.cs" />
-    <Compile Include="HazardZones\Patches\InteractableGroupComponentNamePatch.cs" />
-    <Compile Include="HazardZones\Patches\CanTurnValvePatch.cs" />
-    <Compile Include="HazardZones\Patches\RunReInitPlayerPatch.cs" />
-    <Compile Include="HazardZones\Patches\ShouldSpawnZonePatch.cs" />
-    <Compile Include="HazardZones\Patches\InteractableStateChangePatch.cs" />
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StanceReplication\Components\RSR_Component.cs" />
-    <Compile Include="StanceReplication\Components\RSR_Observed_Component.cs" />
-    <Compile Include="StanceReplication\Config.cs" />
-    <Compile Include="StanceReplication\Core.cs" />
-    <Compile Include="StanceReplication\Fika.cs" />
-    <Compile Include="StanceReplication\Packets\RealismStanceReplicationPacket.cs" />
-    <Compile Include="StanceReplication\Patch.cs" />
-    <Compile Include="StanceReplication\Patches\CoopBot_Create_Patch.cs" />
-    <Compile Include="StanceReplication\Patches\CoopPlayer_Create_Patch.cs" />
-    <Compile Include="StanceReplication\Patches\ObservedCoopPlayer_Create_Patch.cs" />
-    <Compile Include="StanceReplication\Patches\RealismLeftShoulderSwapPatch.cs" />
-    <Compile Include="ToolsAndUtils\Utils.cs" />
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
